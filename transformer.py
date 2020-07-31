@@ -13,7 +13,7 @@ import torch
 warnings.filterwarnings("ignore")
 
 
-class EsperantoDataset(Dataset):
+class CustomDataset(Dataset):
     def __init__(self, tokenizer, file_path: str, length=10000):
         self.tokenizer = tokenizer
         self.file_path = file_path
@@ -89,7 +89,7 @@ tokenizer = RobertaTokenizerFast.from_pretrained("./BR_BERTo", max_len=512)
     
 # Dataset load
 # --------------------------------------------------
-dataset = EsperantoDataset(
+dataset = CustomDataset(
     tokenizer=tokenizer,
     file_path="/ssd/programas/WordEmbeddingPortugues/data/embedding/corpus.txt",
     length=corpus_length
