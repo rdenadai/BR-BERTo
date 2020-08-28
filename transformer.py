@@ -13,7 +13,7 @@ import torch
 warnings.filterwarnings("ignore")
 
 
-class CustomDataset(Dataset):
+class EsperantoDataset(Dataset):
     def __init__(self, tokenizer, file_path: str, length=10000):
         self.tokenizer = tokenizer
         self.file_path = file_path
@@ -25,7 +25,7 @@ class CustomDataset(Dataset):
         return self.len
 
     def preprocess(self, text):
-        batch_encoding = self.tokenizer(str(text).strip(), add_special_tokens=True, truncation=True, max_length=128)
+        batch_encoding = self.tokenizer(str(text).strip(), add_special_tokens=True, truncation=True, max_length=512)
         return torch.tensor(batch_encoding["input_ids"])
 
     def __getitem__(self, i):
@@ -41,12 +41,12 @@ class CustomDataset(Dataset):
 
 # Check that PyTorch sees it
 print("CUDA:", torch.cuda.is_available())
-corpus_length = 12715147 # fazer um wc -l para ver a qtde de linhas
-vocab_size = 50_000
+corpus_length = 6_993_330 # fazer um wc -l para ver a qtde de linhas
+vocab_size = 150_000
 
 # Dataset files
 # --------------------------------------------------
-paths = [str(x) for x in Path("/ssd/programas/WordEmbeddingPortugues/data/embedding").glob("**/corpus.txt")]
+paths = [str(x) for x in Path("./").glob("**/corpus.txt")]
 
 # Byte Level Tokernize
 # --------------------------------------------------
@@ -86,12 +86,12 @@ config = RobertaConfig(
 model = RobertaForMaskedLM(config=config)
 print("Params: ", model.num_parameters())
 tokenizer = RobertaTokenizerFast.from_pretrained("./BR_BERTo", max_len=512)
-    
+
 # Dataset load
 # --------------------------------------------------
-dataset = CustomDataset(
+dataset = EsperantoDataset(
     tokenizer=tokenizer,
-    file_path="/ssd/programas/WordEmbeddingPortugues/data/embedding/corpus.txt",
+    file_path="./corpus.txt",
     length=corpus_length
 )
 
@@ -105,8 +105,10 @@ training_args = TrainingArguments(
     output_dir="./BR_BERTo",
     overwrite_output_dir=True,
     num_train_epochs=3,
-    per_device_train_batch_size=12,
+    per_device_train_batch_size=6,
     do_train=True,
+    save_steps=500_000,
+    save_total_limit=2,
 )
 
 trainer = Trainer(
