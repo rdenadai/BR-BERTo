@@ -1,11 +1,11 @@
 # BR-BERTo
 Transformer model for Portuguese language (Brazil pt_BR)
 
-The first model trained (which is a model RoBERTa model, can be found on tags page: https://github.com/rdenadai/BR-BERTo/releases/tag/0.1
+The first model trained (which is a RoBERTa model), can be found on tags page: https://github.com/rdenadai/BR-BERTo/releases/tag/0.1
 
 The full and latest model, should be downloaded from **Huggingface** page: https://huggingface.co/rdenadai/BR_BERTo
 
-### Params
+### Params (latest model)
 
 Trained on a corpus of 6_993_330 sentences.
 
